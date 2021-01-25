@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 project(xarm6_moveit_config)
+
 find_package(ament_cmake REQUIRED)
 
 ament_package()

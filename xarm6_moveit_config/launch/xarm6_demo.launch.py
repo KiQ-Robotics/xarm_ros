@@ -105,8 +105,8 @@ def generate_launch_description():
     # Fake joint driver
     fake_joint_driver_node = Node(package='fake_joint_driver',
                                   executable='fake_joint_driver_node',
-                                  parameters=[{'controller_name': 'fake_xarm6_controller'},
-                                              os.path.join(get_package_share_directory("xarm6_moveit_config"), "config", "fake_controllers.yaml"),
+                                  parameters=[{'controller_name': 'xarm6_controller'},
+                                              os.path.join(get_package_share_directory("xarm6_moveit_config"), "config", "xarm6_controllers.yaml"),
                                               os.path.join(get_package_share_directory("xarm6_moveit_config"), "config", "start_positions.yaml"),
                                               robot_description]
                                   )
