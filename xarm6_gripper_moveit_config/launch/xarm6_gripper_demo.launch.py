@@ -32,14 +32,14 @@ def generate_launch_description():
     # planning_context
     # robot_description_config = load_file('xarm_description', 'urdf/xarm6.urdf')
     description_pkg_path = get_package_share_directory("xarm_description")
-    xacro_path = description_pkg_path + "/urdf/xarm6_robot.urdf.xacro"
+    xacro_path = description_pkg_path + "/urdf/xarm6_with_gripper.xacro"
     # robot_description = {'robot_description' : robot_description_config}
     robot_description = {'robot_description' : Command(["xacro", " ", xacro_path])}
 
-    robot_description_semantic_config = load_file('xarm6_moveit_config', 'config/xarm6.srdf')
+    robot_description_semantic_config = load_file('xarm6_gripper_moveit_config', 'config/xarm6_with_gripper.srdf')
     robot_description_semantic = {'robot_description_semantic' : robot_description_semantic_config}
 
-    kinematics_yaml = load_yaml('xarm6_moveit_config', 'config/kinematics.yaml')
+    kinematics_yaml = load_yaml('xarm6_gripper_moveit_config', 'config/kinematics.yaml')
     robot_description_kinematics = { 'robot_description_kinematics' : kinematics_yaml }
 
     # Planning Functionality
@@ -47,11 +47,11 @@ def generate_launch_description():
         'planning_plugin' : 'ompl_interface/OMPLPlanner',
         'request_adapters' : """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""" ,
         'start_state_max_bounds_error' : 0.1 } }
-    ompl_planning_yaml = load_yaml('xarm6_moveit_config', 'config/ompl_planning.yaml')
+    ompl_planning_yaml = load_yaml('xarm6_gripper_moveit_config', 'config/ompl_planning.yaml')
     ompl_planning_pipeline_config['move_group'].update(ompl_planning_yaml)
 
     # Trajectory Execution Functionality
-    controllers_yaml = load_yaml('xarm6_moveit_config', 'config/controllers.yaml')
+    controllers_yaml = load_yaml('xarm6_gripper_moveit_config', 'config/arm_controllers.yaml')
     moveit_controllers = { 'moveit_simple_controller_manager' : controllers_yaml,
                            'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'}
 
@@ -79,7 +79,7 @@ def generate_launch_description():
                                            planning_scene_monitor_parameters])
 
     # RViz
-    rviz_config_file = get_package_share_directory('xarm6_moveit_config') + "/launch/moveit.rviz"
+    rviz_config_file = get_package_share_directory('xarm6_gripper_moveit_config') + "/launch/moveit.rviz"
     rviz_node = Node(package='rviz2',
                      executable='rviz2',
                      name='rviz2',
@@ -109,8 +109,8 @@ def generate_launch_description():
     fake_joint_driver_node = Node(package='fake_joint_driver',
                                   executable='fake_joint_driver_node',
                                   parameters=[{'controller_name': 'xarm6_controller'},
-                                              os.path.join(get_package_share_directory("xarm6_moveit_config"), "config", "xarm6_controllers.yaml"),
-                                              os.path.join(get_package_share_directory("xarm6_moveit_config"), "config", "start_positions.yaml"),
+                                              os.path.join(get_package_share_directory("xarm6_gripper_moveit_config"), "config", "xarm6_controllers.yaml"),
+                                              os.path.join(get_package_share_directory("xarm6_gripper_moveit_config"), "config", "start_positions.yaml"),
                                               robot_description]
                                   )
 

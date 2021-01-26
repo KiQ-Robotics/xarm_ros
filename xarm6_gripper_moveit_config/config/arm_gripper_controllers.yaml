@@ -1,8 +1,12 @@
-controller_list:
-  - name: arm_controller
-    action_ns: follow_joint_trajectory
-    type: FollowJointTrajectory
-    joints:
+controller_names:
+  - xarm6_controller
+  - xarm6_gripper_controller
+
+xarm6_controller:
+  action_ns: follow_joint_trajectory
+  type: FollowJointTrajectory
+  default: true
+  joints:
       - joint1
       - joint2
       - joint3
@@ -10,10 +14,10 @@ controller_list:
       - joint5
       - joint6
 
-  - name: gripper_controller
-    # action_ns: gripper_action
-    # type: GripperCommand
-    action_ns: follow_joint_trajectory
-    type: FollowJointTrajectory
-    joints:
-     - drive_joint
+xarm6_gripper_controller:
+  # action_ns: gripper_action
+  # type: GripperCommand
+  action_ns: follow_joint_trajectory
+  type: FollowJointTrajectory
+  joints:
+    - drive_joint
