@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(xarm_msgs)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -7,11 +7,10 @@ project(xarm_msgs)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  message_generation
-  message_runtime
-  std_msgs
-)
+find_package(ament_cmake REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(rosidl_default_runtime REQUIRED)
+find_package(std_msgs REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -47,33 +46,31 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   RobotMsg.msg
-   IOState.msg
+ set(msg_files
+   "msg/RobotMsg.msg"
+   "msg/IOState.msg"
  )
 
 ## Generate services in the 'srv' folder
- add_service_files(
-   FILES
-   Move.srv
-   SetAxis.srv
-   SetInt16.srv
-   TCPOffset.srv
-   SetDigitalIO.srv
-   GetDigitalIO.srv
-   GetAnalogIO.srv
-   ClearErr.srv
-   GetErr.srv
-   GripperConfig.srv
-   GripperMove.srv
-   GripperState.srv
-   SetLoad.srv
-   SetToolModbus.srv
-   ConfigToolModbus.srv
-   GetControllerDigitalIO.srv
-   SetControllerAnalogIO.srv
-   MoveAxisAngle.srv
+ set(srv_files
+   "srv/Move.srv"
+   "srv/SetAxis.srv"
+   "srv/SetInt16.srv"
+   "srv/TCPOffset.srv"
+   "srv/SetDigitalIO.srv"
+   "srv/GetDigitalIO.srv"
+   "srv/GetAnalogIO.srv"
+   "srv/ClearErr.srv"
+   "srv/GetErr.srv"
+   "srv/GripperConfig.srv"
+   "srv/GripperMove.srv"
+   "srv/GripperState.srv"
+   "srv/SetLoad.srv"
+   "srv/SetToolModbus.srv"
+   "srv/ConfigToolModbus.srv"
+   "srv/GetControllerDigitalIO.srv"
+   "srv/SetControllerAnalogIO.srv"
+   "srv/MoveAxisAngle.srv"
  )
 
 ## Generate actions in the 'action' folder
@@ -84,10 +81,12 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs
- )
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  ${srv_files}
+  DEPENDENCIES
+    std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -118,12 +117,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
+#catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES xarm_msgs
-  CATKIN_DEPENDS std_msgs message_generation message_runtime 
+#  CATKIN_DEPENDS std_msgs message_generation message_runtime 
 #  DEPENDS system_lib
-)
+#)
 
 ###########
 ## Build ##
@@ -133,7 +132,10 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
  include
-  ${catkin_INCLUDE_DIRS}
+  ${ament_cmake_INCLUDE_DIRS}
+  ${rosidl_default_generators_INCLUDE_DIRS}
+  ${rosidl_default_runtime_INCLUDE_DIRS}
+  ${std_msgs_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -213,3 +215,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+ament_export_dependencies(rosidl_default_runtime)
+
+ament_package()
